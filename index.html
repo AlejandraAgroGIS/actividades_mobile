@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Prueba Lungo</title>
+		<link rel="Stylesheet" type="text/css" href="lungo/lungo.css">
+		<link rel="Stylesheet" type="text/css" href="lungo/lungo.theme.css">
+		<link rel="Stylesheet" type="text/css" href="lungo/lungo.icon.css">
+		<script type="text/javascript" src="js/calendarMobile.js"></script>
+		<link rel="stylesheet" href="js/calendarMobile.css">	
+		<link rel="stylesheet" type="text/css" href="js/autosuggest.css"></link>
+		<script type="text/javascript" src="js/autosuggest.js"></script>	
+		<script charset="utf-8" type="text/javascript" src="js/jquery.js"></script> 
+
+	</head>
+	<body>
+
+		<section id="main" data-transition="slide" data-aside="features">
+			<header data-title="Actividades">
+				<nav>
+					<button data-view-aside="features" data-icon="menu"></button>
+				</nav>
+			</header>
+
+			<style type="text/css">
+			input
+			{
+				font-size: 20px;
+				font-family: arial;
+
+				width: 300px;
+			}
+			
+			</style>
+
+			<style type = "text/css">
+			textarea.error{
+				background-color:#FF9;
+				border:1px solid red;
+			}
+			</style>
+
+			<article id="art_1" class="indented scroll">
+			        <div class="form" >
+
+			        	
+			            <label>Fecha:</label>
+			            <input id="fecha1" type="text" placeholder="calendar" class="border" />	 
+
+			            <label>Empresa:</label>
+			            <input id="empresa" type="text" placeholder="empresa" class="border" value=""/>	
+
+			            <br>
+			        	</br>
+			            <label>Observaciones:</label>
+			            <textarea id="obs" type="text" rows="7" class="border"></textarea>
+
+			            <label>Tipo de Contacto:</label>
+			            <label class="select border">
+			                <select id="contacto">
+			                    <option value="1">Telefono</option>
+			                    <option value="2">Campo</option>
+			                    <option value="3">Escritorio</option>
+			                    <option value="3">Email</option>
+			                </select>
+			            </label>
+
+			            <label>Tipo de Actividad:</label>
+			            <label class="select border">
+			                <select id="activ">
+			                    <option value="1">Consulta</option>
+			                    <option value="2">Reclamo</option>
+			                    <option value="3">Cotizacion</option>
+			                </select>
+			            </label>
+
+			            <fieldset class="border">
+                			<label class="anchor">Prioridad:</label>
+                			<input id="pri" type="checkbox" class="inline right" />
+             			</fieldset>
+
+             			<br></br>
+
+             			<button id="guardar">Guardar</button>
+             			<p id="records"></p>
+
+						<div id="status">
+						</div>
+
+			    	</article>
+	
+		</section>
+
+
+
+	<aside id="features" data-transition="left">
+	    <header data-title="Menu">
+	        <nav class="on-right">
+	            <a href="#" class="buttons" data-icon="cog"></a>
+	        </nav>
+	    </header>
+
+	    <article class="list scroll active">
+	        <ul>
+	            <!-- Basic Layout -->
+	            <li data-view-article="art_1" data-icon="refresh">
+	                <strong>Sincronizar</strong>
+	            </li>
+
+	            <!-- Layout & Navigation -->
+	            <li data-view-article="art_2" data-icon="tasks">
+	                <div class="tag on-right">0</div>
+	                <strong>Actividades</strong>
+	            </li>
+
+	            <!-- List -->
+	            <li data-view-article="art_3" data-icon="signout">
+	                <strong>Salir</strong>
+	            </li>
+	        </ul>
+	    </article>
+	</aside>
+
+
+
+		<script type="text/javascript" src="quo/quo.js"></script>
+		<script type="text/javascript" src="lungo/lungo.js"></script>	
+		<script type="text/javascript" src="js/eventos.js"></script>
+		<script type="text/javascript">
+
+		
+		var newInputFecha1;
+		var vector = new Array;
+		var sel_emp = 0;
+		window.onload = function() {
+
+			$(document).ready(connect());
+
+			/* <!-- Se crean nuevas Instancia la clase ClassCalendarMobile --> */
+			// Ejemplo de uso 1 modificando todos los atributos ->
+			newInputFecha1 = new ClassCalendarMobile
+			({
+				id_input      : 'fecha1',
+				modal         : true,
+				separatorDate : '/',
+				limitDate     : '2011',
+				arrayDays     : 'Dom,Lun,Mar,Mié,Jue,Vie,Sáb',
+				arrayMonths   : 'Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov,Dic'
+			});
+
+		Lungo.init({
+				name: "Prueba",
+				version: "1.0"
+			});
+			Lungo.ready(function(){
+			 	
+			 	//Lungo.Notification.success("Binamics App","Ingreso OK","ok",10);
+			 	
+				// Lungo.dom('#main').swipeRight(function(event) {
+				//     Lungo.Aside.show("features");
+				// });	
+
+				// Lungo.dom('#main').swipeLeft(function(event) {
+				//     Lungo.Aside.hide();
+				// });
+						
+			}); 
+			// Lungo.Events.init({
+ 				
+			// 	Lungo.dom('section#second footer a:nth-child(2)').tap(function(event) {
+			// 	    Lungo.Notification.loading();
+			// 	     setTimeout(Lungo.Notification.hide, 4000);
+			// 	});
+   //  		});
+			var db = window.openDatabase("Prueba","1.0","Prueba DB", 5*1024*1024);
+			
+				// Funcion que recorre todos los elementos de la pagina
+			function $_(selector){
+					return document.querySelector(selector);
+			}
+			success_callback = function(tx){ alert("Transacción correcta"); };
+
+			db.transaction(function(tx){
+			tx.executeSql('DROP TABLE empresas');
+					
+			});
+
+			db.transaction(function(tx){
+			tx.executeSql('CREATE TABLE if not exists activi (iduno integer primary key autoincrement, observaciones text, tipoContacto text, tipoActividad text, priori text, fecha text, empresa integer)');
+					
+			});	
+
+			db.transaction(function(tx){
+			tx.executeSql('CREATE TABLE if not exists empresas (idi integer primary key, nombre text)');
+					
+			});				
+
+		
+			//GUARDAR DATOS
+
+			$_('#guardar').onclick = function(){
+					var observ=document.getElementById("obs").value;
+     				if (observ.length==0)
+     				{
+      				alert('Complete el campo observaciones');
+      				obs.className='error';
+      			 	return false;
+     					}
+     				else
+      				var prioridad;
+					if (document.getElementById('pri').checked)
+  						{
+    					prioridad = true;
+  						}else{
+  						prioridad = false;
+  						}
+					db.transaction(function(tx){
+					tx.executeSql('INSERT INTO activi (observaciones, tipoContacto, tipoActividad, priori, fecha, empresa) VALUES (?,?,?,?,?,?)', [$_("#obs").value, $_("#contacto").value, $_("#activ").value, prioridad, $_("#fecha1").value, sel_emp], success_callback, null);
+					obs.className='';
+					 return true;
+					});
+						
+			}
+
+
+			//TRAER DATOS DE MYSQL Y GUARDARLOS EN LA BASE DE DATOS LOCAL
+			function connect(e){ 
+				var term= {button:e};
+				$.ajax({ 
+					url:'http://localhost/actividades/server/json.php', 
+					type:'POST', 
+					data:term, 
+					dataType:'json', 
+					error:function(jqXHR,text_status,strError){ 
+					alert('no connection');}, 
+					timeout:60000, 
+					success:function(data){ 
+					$("#result").html(""); 
+					db.transaction(function(tx){
+					var l = data.length;
+					alert (l);
+					var sql = "INSERT INTO empresas(idi,nombre) VALUES(?,?)";
+					var e;
+					for(var i=0; i<l; i++){
+						e=data[i];
+						var params = [e.id, e.emp_nombre];
+						tx.executeSql(sql, params);
+					}
+
+					tx.executeSql("SELECT nombre, idi FROM empresas", [], function(tx,results){
+							for(var i=0; i<results.rows.length; i++){
+								var record = results.rows.item(i);
+								vector.push([record.nombre, record.idi]);
+
+						}
+						autocomplete(vector);
+						
+						});
+					});
+				}	
+				});	
+
+				//AUTOCOMPLETE
+					
+					
+			} 
+
+				
+				
+				function autocomplete(vector){
+				new autosuggest("empresa", vector, null, function(index, control){
+					sel_emp = control.values[index];
+				});
+
+				};
+			}
+	</script>
+
+
+	</body>
+</html>
